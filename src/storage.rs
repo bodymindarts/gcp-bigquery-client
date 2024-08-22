@@ -144,9 +144,14 @@ impl StorageApi {
         // Since Tonic 0.12.0, TLS root certificates are no longer implicit.
         // We need to specify them explicitly.
         // See: https://github.com/hyperium/tonic/pull/1731
+        #[cfg(feature = "native-tls")]
         let tls_config = ClientTlsConfig::new()
             .domain_name(BIGQUERY_STORAGE_API_DOMAIN)
             .with_native_roots();
+        #[cfg(feature = "rust-tls")]
+        let tls_config = ClientTlsConfig::new()
+            .domain_name(BIGQUERY_STORAGE_API_DOMAIN)
+            .with_webpki_roots();
         let channel = Channel::from_static(BIG_QUERY_STORAGE_API_URL)
             .tls_config(tls_config)?
             .connect()
