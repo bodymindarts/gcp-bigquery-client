@@ -15,7 +15,7 @@ pub struct Routine {
     /// Optional. Defaults to "SQL".
     pub language: Option<Language>,
     /// Required. The body of the routine. For functions, this is the expression in the AS clause. If language=SQL, it is the substring inside (but excluding) the parentheses. For example, for the function created with the following statement: `CREATE FUNCTION JoinLines(x string, y string) as (concat(x, "\n", y))` The definition_body is `concat(x, "\n", y)` (\n is not replaced with linebreak). If language=JAVASCRIPT, it is the evaluated string in the AS clause. For example, for the function created with the following statement: `CREATE FUNCTION f() RETURNS STRING LANGUAGE js AS 'return "\n";\n'` The definition_body is `return "\n";\n` Note that both \n are replaced with linebreaks.
-    pub definition_body: String,
+    pub definition_body: Option<String>,
     /// Output only. The time when this routine was created, in milliseconds since the epoch.
     pub creation_time: Option<String>,
     /// Optional. [Experimental] The determinism level of the JavaScript UDF if defined.
@@ -30,6 +30,11 @@ pub struct Routine {
     pub routine_reference: RoutineReference,
     /// Output only. The time when this routine was last modified, in milliseconds since the epoch.
     pub last_modified_time: Option<String>,
+
+    pub strict_mode: Option<bool>,
+    pub remote_function_object: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub spark_options: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub data_governance_type: Option<DataGovernanceType>,
 }
 
 /// Required. The type of routine.
@@ -67,4 +72,11 @@ pub enum DeterminismLevel {
     Deterministic,
     /// The UDF is not deterministic.
     NotDeterministic,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum DataGovernanceType {
+    DataGovernanceTypeUnspecified,
+    DataMasking,
 }
