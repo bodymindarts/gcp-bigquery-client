@@ -42,6 +42,7 @@ pub enum RoutineType {
     ScalarFunction,
     /// Stored procedure.
     Procedure,
+    TableValuedFunction,
 }
 
 /// Optional. Defaults to "SQL".
