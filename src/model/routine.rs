@@ -30,11 +30,6 @@ pub struct Routine {
     pub routine_reference: RoutineReference,
     /// Output only. The time when this routine was last modified, in milliseconds since the epoch.
     pub last_modified_time: Option<String>,
-
-    pub strict_mode: Option<bool>,
-    pub remote_function_object: Option<std::collections::HashMap<String, serde_json::Value>>,
-    pub spark_options: Option<std::collections::HashMap<String, serde_json::Value>>,
-    pub data_governance_type: Option<DataGovernanceType>,
 }
 
 /// Required. The type of routine.
@@ -47,6 +42,7 @@ pub enum RoutineType {
     ScalarFunction,
     /// Stored procedure.
     Procedure,
+    /// Non-built-in persistent TVF.
     TableValuedFunction,
 }
 
@@ -72,11 +68,4 @@ pub enum DeterminismLevel {
     Deterministic,
     /// The UDF is not deterministic.
     NotDeterministic,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-pub enum DataGovernanceType {
-    DataGovernanceTypeUnspecified,
-    DataMasking,
 }
